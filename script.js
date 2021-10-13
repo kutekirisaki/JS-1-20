@@ -143,6 +143,7 @@ function fix23(array) {
     for (let i=0; i<array.length; i++) {
         if (array[i] == 2) {
             if (array[i+1] == 3) {
+
                 let changedArray = array;
                 changedArray[i+1] = 0;
                 return changedArray;
@@ -161,6 +162,7 @@ function countYZ(string) {
     for (let i=0; i<array.length; i++) {
         word = array[i];
         word = word.toLowerCase();
+
         for (let i=0; i<word.length; i++) {
             if (word[i] == "y" || word[i] == "z") {
                 counter = counter + 1;
@@ -189,32 +191,145 @@ let string2 = "hdfsa";
 
 console.log(endOther(string1,string2));
 
-// 16. starOUt
+// 16. starOut
+/*
 function starOut(string) {
-    let stringArray = string.split("");
-    let indexArray = [];
-
-    for (let i=0; i<stringArray.length; i++) {
-        if (stringArray[i] == "*") {
-            indexArray.push(stringArray.indexOf(stringArray(i-2)));
+    let resultingString = [];
+    for (let i=0; i<string.length; i++) {
+        if (string.charAt(i) == "*") {
+            if (string.charAt(i-1) !== "*") {
+                if (string.charAt(i-2) !== "*") {resultingString.push(string.charAt(i-2))};
+            }
+            if (string.charAt(i+1) !== "*") {
+                if (string.charAt(i+2) !== "*") {resultingString.push(string.charAt(i+2))};
+            }
         }
     }
-    for (let i=0; i<3; i++) {
-        stringArray
+    return resultingString.join("");
+}
+*/
+
+function starOut(string) {
+    let resultingString = [];
+    let counter = 0;
+    let x = 1;
+
+    for (let i=0; i<string.length; i++) {
+        if (counter) {
+            x = 1;
+            counter--;
+            continue;
+        }
+        if (string.charAt(i) == "*") {
+            counter = 1;
+            resultingString.pop();
+
+            while (string.charAt(i + x) == "*") {
+                console.log(x);
+                x++;
+                counter++;
+            }
+        } else {
+            resultingString.push(string.charAt(i))
+        }
     }
+    return resultingString.join("");
 }
 
-let string = "asdfdfsg";
-let array = string.split("")
-let index = array(3);
-console.log(string.indexOf(string.indexOf(string[5-2])));
+console.log(starOut("ab*cd"));
+
 
 // 17. getSandwich 
 
 function getSandwich(string) {
-    if ("bread" in string) {
+    let secondHalf;
+    let result;
+
+    if (string.indexOf("bread") !== -1) {
         let index1 = string.indexOf("bread");
-        index1 = index1 + 5;
+        index1 = index1 + "bread".length;
+
+        secondHalf = string.slice(index1, string.length);
+
+        if (secondHalf.indexOf("bread") !== -1) {
+            let index2 = secondHalf.indexOf("bread");
+
+            return secondHalf.slice(0, index2);
+        }
+    }
+    return "";
+}
+
+console.log(getSandwich("xxbreadturkeybreadyy"));
+
+// 18. getBalance
+function getBalance(array) {
+    let sum1 = 0;
+    let sum2;
+    let rightSide;
+
+    for (let i=0; i<array.length; i++) {
+        sum1 = sum1 + array[i];
+
+        rightSide = array.slice(i+1, array.length); //takes the right side
+        sum2 = add(rightSide);
+
+        if (sum1 == sum2) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function add(array) { //function for sum of array
+    let sum = 0;
+    for (let i=0; i<array.length; i++) {
+        sum = sum + array[i];
+    }
+    return sum;
+}
+
+// 19. canClumps 
+
+function countClumps(array) {
+    let count = 0;
+    let counter = 0;
+
+    for (let i=0; i<array.length; i++) {
+        if (counter) {  //skips over clump if clump > 2
+            counter--;
+            continue;
+        }
+
+        if (array[i] == array[i + 1]) {
+            count++;
+            counter++;
+
+            while(array[i] == array[i + counter]) { //counts up repeating numbers
+                counter++; //
+            }
+            counter--;
+        }
+    }
+    return count;
+}
+
+// 20. sameEnds
+
+function sameEnds(string) {
+    let start; 
+    let end;
+
+    for (let i=string.length-1; i>0; i--) {
+        start = string.slice(0,i); 
+
+        for (let x=2; x<string.length; x++) {
+            end = string.slice(x,string.length);
+            if (start == end) {
+                return start;
+            }
+        }
     }
 }
 
+console.log(sameEnds("xxxxx"));
